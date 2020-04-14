@@ -1,0 +1,4 @@
+rootProject.name='GithubProject'
+include ':app'
+include ':common'
+include ':mvp'
