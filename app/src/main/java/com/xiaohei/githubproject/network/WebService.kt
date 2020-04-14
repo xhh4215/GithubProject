@@ -2,6 +2,9 @@ package com.xiaohei.githubproject.network
 
 import com.xiaohei.common.ext.ensureDir
 import com.xiaohei.githubproject.app.AppContext
+import com.xiaohei.githubproject.network.interceptors.AcceptIntercepter
+import com.xiaohei.githubproject.network.interceptors.AuthInterceptor
+import okhttp3.Authenticator
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,6 +31,8 @@ val retrofit by lazy {
                 .readTimeout(60,TimeUnit.SECONDS)
                 .writeTimeout(60,TimeUnit.SECONDS)
                 .cache(Cache(cacheFile,1024*1024*1024))
+                .addInterceptor(AcceptIntercepter())
+                .addInterceptor(AuthInterceptor())
                 .addInterceptor(HttpLoggingInterceptor().setLevel(Level.BODY))
             .build()
         )
