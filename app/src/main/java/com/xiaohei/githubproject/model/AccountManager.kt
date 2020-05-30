@@ -18,6 +18,7 @@ object AccountManager {
     var authid by pref(-1)
     var password by pref("")
     var token by pref("")
+    fun isLogedIn():Boolean= token.isNotEmpty()
     private var userJson by pref("")
 
     var currentUser : User? = null
@@ -35,12 +36,20 @@ object AccountManager {
           }
           field = value
       }
-    fun isLogedIn():Boolean= token.isNotEmpty()
+    val onAccountStateChangeListeners = ArrayList<OnAccountStateChangeListener>()
+    private fun notifyLogin(user:User){
+       onAccountStateChangeListeners.forEach {
+           it.onLogin(user)
+       }
+    }
+    private fun notifyLogout(){
+        onAccountStateChangeListeners.forEach {
+            it.onLogout()
+        }
+    }
 
 
     fun login() = AuthService.createAuthorization(AuthorizationReq())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeOn(Schedulers.io())
         .doOnNext{
            if (it.token.isEmpty()) throw AccountException(it)
         }
@@ -60,6 +69,7 @@ object AccountManager {
         }
         .map {
             currentUser = it
+            notifyLogin(it)
         }
 
     fun logout()=AuthService.deleteAuthorization(authid)
@@ -68,12 +78,17 @@ object AccountManager {
                 authid=-1
                 token = ""
                 currentUser = null
+                notifyLogout()
             }else{
                 throw  HttpException(it)
             }
         }
-
     class AccountException(val authorizationRsp: AuthorizationRsp):Exception("already login"){
 
+    }
+    interface OnAccountStateChangeListener{
+        fun onLogin(user: User)
+
+        fun onLogout()
     }
 }

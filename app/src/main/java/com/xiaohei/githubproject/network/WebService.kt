@@ -11,7 +11,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory2
 import retrofit2.converter.gson.GsonConverterFactory
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -23,7 +26,7 @@ private val cacheFile by lazy {
 }
 val retrofit by lazy {
     Retrofit.Builder()
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        .addCallAdapterFactory(RxJavaCallAdapterFactory2.createWithSchedulers(Schedulers.io(), AndroidSchedulers.mainThread()))
         .addConverterFactory(GsonConverterFactory.create())
         .client(
             OkHttpClient.Builder()

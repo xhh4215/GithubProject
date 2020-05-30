@@ -1,11 +1,11 @@
-package com.xiaohei.mvp.Presenter.impl
+package com.xiaohei.mvp.presenter.impl
 
 import android.content.res.Configuration
 import android.os.Bundle
-import com.xiaohei.mvp.Presenter.IPresenter
-import com.xiaohei.mvp.View.IView
+import com.xiaohei.mvp.presenter.IPresenter
+import com.xiaohei.mvp.view.IMvpView
 
-abstract class BasePresenter <out V:IView<BasePresenter<V>>>:IPresenter<V>{
+abstract class BasePresenter <out V:IMvpView<BasePresenter<V>>>:IPresenter<V>{
 
     override lateinit var view:  @UnsafeVariance V
      override fun onCreate(savedInstanceState: Bundle?) {

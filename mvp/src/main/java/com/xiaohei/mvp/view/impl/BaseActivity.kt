@@ -1,17 +1,17 @@
-package com.xiaohei.mvp.View.impl
+package com.xiaohei.mvp.view.impl
 
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.xiaohei.mvp.Presenter.IPresenter
-import com.xiaohei.mvp.Presenter.impl.BasePresenter
-import com.xiaohei.mvp.View.IView
+import com.xiaohei.mvp.presenter.IPresenter
+import com.xiaohei.mvp.presenter.impl.BasePresenter
+import com.xiaohei.mvp.view.IMvpView
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.jvmErasure
 
-abstract class BaseActivity<out P: BasePresenter<BaseActivity<P>>>: IView<P>, AppCompatActivity(){
+abstract class BaseActivity<out P: BasePresenter<BaseActivity<P>>>: IMvpView<P>, AppCompatActivity(){
     override val presenter: P
 
     init {
